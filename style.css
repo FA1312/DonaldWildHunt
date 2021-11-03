@@ -1,3 +1,8 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
 .splash{
   position: fixed;
   top: 0;
@@ -35,4 +40,41 @@
 .fade-in {
   opacity: 0;
   animation: fadeIn 1s ease-in forwards;
+}
+
+img{
+  height: 101vh;
+}
+
+h2 {
+  position: absolute;
+  background: none;
+  top: 21rem;
+  left: 32rem;
+  font-size: 4rem;
+}
+
+button {
+  width: 260px;
+  height: 60px;
+  font-size: 1rem;
+  font-weight: 600;
+  position: absolute;
+  top: 27rem;
+  left: 41rem;
+  border-radius: 10px;
+  text-decoration: none;
+  background-color: #0037eb;
+  color:#FFFFFF;
+  text-align: center;
+}
+
+button:hover {
+    background-color:#e71717e5;
+    color: black;
+  }
+
+a {
+  text-decoration: none;
+  color: #FFFFFF;
 }
