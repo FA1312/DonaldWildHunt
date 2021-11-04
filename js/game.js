@@ -42,12 +42,19 @@ class Enemy {
   update() {
     this.draw()
   }
+  move() {
+    setInterval(()=>{
+    this.x += 1
+    this.y += 1
+    // encontrar la formula para que los enemigos se vayan hacia player
+  }, 1500)
+  }
 }
 
 //Initialize variables
 let player;
 let enemies = [];
-let bullets = [];
+let bullets = []; // crear funcion shoot dentro de class Player o crear class Bullet y que maniobre como objeto solitario?
 
 
 function start() {
@@ -62,7 +69,6 @@ function spawnEnemies() {
     const radius = 20
     const color = "green"
     const speed = 10 // Ni idea?!?!? crear distancia y que se vaya quedando mas cerca???
-    let dist = 
     enemies.push(new Enemy(x, y, radius, color, speed))
   },1500)
 }
@@ -75,6 +81,7 @@ function update() {
   player.update()
   for (var i = 0; i < enemies.length; i++){
     enemies[i].update()
+    enemies[i].move() 
   }
   //enemies.update is not a function solucionado iterando dentro del array de enemies
 }
