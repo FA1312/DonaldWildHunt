@@ -12,10 +12,10 @@ Take the lead and guide our president to save the democracy.
 The MVP includes the following items graphically represented by colors:
 ​
 - One defender
-- Tower to shoot
-- Building to defend
-- Incoming attackers to destroy
-​
+- Bullet to shoot at the direction of the enemies
+- Incoming attackers to destroy coming at you
+- 5 lives
+​- Once touched by an enemy you lose one life
 ​
 ## Backlog / nice to have
 ​
@@ -26,13 +26,13 @@ The MVP includes the following items graphically represented by colors:
 ​
 ## Data structure
 - class Player {
-properties: life, direction.
-Methods: goRight, goLeft
+properties: x, y, radius, color
+Methods: _shoot
 }
 ​
 - class Enemy {
-properties: direction.
-Methods: _appear, _move
+properties: direction, x, y, radius
+Methods: _spawn, _move
 }
 ​
 - class Game { properties: player, enemies. Methods:
@@ -45,14 +45,13 @@ Methods: _appear, _move
 ​
 Definition of the different states and their transition (transition functions):
 ​
-- splashScreen - Instructions and start button
+- Introduction
+- splashScreen - Start button
 - gameScreen - Game itself
-- Score 
 - gameoverScreen - If you have been hit three times, the game is over (start again)
 ​
 ## Links
 ​
-### Trello
 ​
 [Link url]
 ​
