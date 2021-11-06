@@ -27,20 +27,29 @@ class Game {
       0,
       Math.PI * 2
     );
-    /*The arc() method creates a circular arc centered at (x, y) with a radius of radius. The path starts at startAngle, ends at endAngle, and travels in the direction given by counterclockwise (defaulting to clockwise).*/
-    this.ctx.fillStyle = this.color;
-    /*The CanvasRenderingContext2D.fillStyle property of the Canvas 2D API specifies the color, gradient, or pattern to use inside shapes. */
-    this.ctx.fill();
+  this.ctx.fillStyle = this.color;
+  this.ctx.fill();
   }
 
   _drawEnemies() {
     this.enemies.forEach((enemy) => {
-      this.ctx.fillStyle = "green";
+      this.ctx.fillStyle = "grthis._playerHit();en";
       this.ctx.beginPath();
       this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
       this.ctx.fillStyle = enemy.color;
       this.ctx.fill();
       enemy.move();
+    });
+  }
+
+  _drawBullets() {
+      this.bullets.forEach((bullet) => {
+      this.ctx.fillStyle = "white";
+      this.ctx.beginPath();
+      this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+      this.ctx.fillStyle = bullet.color;
+      this.ctx.fill();
+      bullet.move();
     });
   }
 
@@ -56,10 +65,27 @@ class Game {
         y: Math.sin(angle),
       };
       this.enemies.push(new Enemy(x, y, radius, color, speed));
-    }, 1500);
+    }, 2000);
     // if (this.enemies.y > 400) {
     //   this.enemies.splice(i, 1);
     // }
+  }
+
+  _shootBullets() {
+      addEventListener('keypress', (event) => {
+      if(event.code == "Space") {
+      const x = this.player.x;
+      const y = this.player.y;
+      const radius = 5;
+      const color = "white";
+      const angle = Math.atan2(this.target.y - y, this.target.x - x);
+      const speed = {
+        x: Math.cos(angle) * 8,
+        y: Math.sin(angle) * 8
+      };
+      this.bullets.push(new Bullet(x, y, radius, color, speed));
+      }
+      })
   }
 
   _assignControls() {
@@ -69,26 +95,68 @@ class Game {
     });
   }
 
+  _cleanBulletsOutsideCanvas() {
+    this.bullets.forEach((bullet, index) => {
+      if (bullet.y + 1000 < this.canvas.height) {
+        this.bullets.splice(index, 1);
+      }
+      if (bullet.x - bullet.radius < 0) {
+        setTimeout(()=> {
+          this.bullets.splice(index, 1)
+        }, 0)
+      }
+    });
+  }
+
+  _destroyEnemies() {
+    this.enemies.forEach((enemy, index) => {
+      this.bullets.forEach((bullet, j) => {
+        const distance = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y)
+        if (distance - enemy.radius - bullet.radius < 1) {
+          setTimeout(() => {
+          delete this.enemies[index]
+          delete this.bullets[j]
+        }, 0)
+        }
+      })
+    })
+  }
   _cleanEnemiesOutsideCanvas() {
     this.enemies.forEach((enemy, index) => {
       if (enemy.y > this.canvas.height) {
         enemy.removeInterval();
         this.enemies.splice(index, 1);
       }
-    });
+    })
   }
-
+  _playerHit(){
+    this.enemies.forEach((enemy, index)=>{
+        const distance = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y)
+        if (distance - enemy.radius - this.player.radius < 1) {
+          console.log("gameover")
+        }
+      })
+  }
+  
   _update() {
     //clear the screen
     this._clean();
     this._drawPlayer();
     this._drawEnemies();
+    this._drawBullets();
+    //this._shootBullets();
+    this._destroyEnemies();
+    this._assignControls()
     this._cleanEnemiesOutsideCanvas();
+    this._cleanBulletsOutsideCanvas();
+    this._playerHit();
+    //this._playerHit();
     requestAnimationFrame(this._update.bind(this));
   }
 
   start() {
     this._spawnEnemies();
+    this._shootBullets();
     window.requestAnimationFrame(this._update.bind(this));
   }
 }
