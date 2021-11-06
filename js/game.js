@@ -44,9 +44,8 @@ class Enemy {
   }
   move() {
     setInterval(()=>{
-    this.x += 1
-    this.y += 1
-    // encontrar la formula para que los enemigos se vayan hacia player
+      this.x = this.x + this.speed.x
+      this.y = this.y + this.speed.y
   }, 1500)
   }
 }
@@ -64,11 +63,16 @@ function start() {
 
 function spawnEnemies() {
   setInterval(()=>{
-    let x = Math.random() * canvas.width /* Problema 1 los enemigos aparecen en punto random del mapa, yo quiero que esten al borde del canvas */
-    let y = Math.random() * canvas.height
+    
+    let x = Math.random() * canvas.width
+    let y = 0
     const radius = 20
     const color = "green"
-    const speed = 10 // Ni idea?!?!? crear distancia y que se vaya quedando mas cerca???
+    const angle = Math.atan2(canvas.height - y, canvas.width / 2 - x)
+    const speed = {
+      x: Math.cos(angle),
+      y: Math.sin(angle)
+     }
     enemies.push(new Enemy(x, y, radius, color, speed))
   },1500)
 }
@@ -83,6 +87,7 @@ function update() {
     enemies[i].update()
     enemies[i].move() 
   }
+
   //enemies.update is not a function solucionado iterando dentro del array de enemies
 }
 
