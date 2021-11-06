@@ -1,7 +1,15 @@
-
 let player;
 let enemies = [];
 let bullets = []; 
+let target = {
+  x: canvas.width,
+  y: canvas.height
+}
+
+addEventListener('mousemove', (event) => {
+  target.x = event.clientX
+  target.y = event.clientY
+});
 
 function start() {
   player = new Player(canvas.width/2, canvas.height, 40, 'red')
@@ -25,6 +33,9 @@ function spawnEnemies() {
     enemies.splice(i, 1)
   }
 }
+function shoot() {
+  let x = player.x
+}
 
 function update() {
   requestAnimationFrame(update);
@@ -34,10 +45,9 @@ function update() {
   player.update()
   for (var i = 0; i < enemies.length; i++){
     enemies[i].update()
-    enemies[i].move() 
+    enemies[i].move()
   }
-
-  //enemies.update is not a function solucionado iterando dentro del array de enemies
+  
 }
 
 spawnEnemies()
