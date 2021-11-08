@@ -11,6 +11,7 @@ class Game {
     };
     this.score = 0;
     this.life = 3;
+    this.gameOver = options.gameOver;
   }
 
   _clean() {
@@ -78,9 +79,10 @@ _drawEnemies() {
       const radius = 5;
       const color = "white";
       const angle = Math.atan2(this.target.y - y, this.target.x - x);
+      console.log(angle)
       const speed = {
-        x: Math.cos(angle) * 8,
-        y: Math.sin(angle) * 8
+        x: Math.cos(angle) * 5,
+        y: Math.sin(angle) * 5
       };
       this.bullets.push(new Bullet(x, y, radius, color, speed));
       }
@@ -124,7 +126,7 @@ _drawEnemies() {
 
   _drawScore(){
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#fff";
     ctx.fillText("Score: "+ this.score, 8, 20);
   }
 
@@ -154,9 +156,8 @@ _drawEnemies() {
 
   _gameOver(){
     if (this.life == 0){
-      alert("GAME OVER");
-      document.location.reload();
-      clearInterval(interval);
+      this.gameOver.style.visibility = "visible";
+      this.canvas.style.display = "none";
     }
   }
   
@@ -184,10 +185,14 @@ _drawEnemies() {
 }
 
 const canvas = document.querySelector("#game");
+canvas.width = innerWidth
+canvas.height = innerHeight
 const ctx = canvas.getContext("2d");
+const gameOver = document.querySelector("#gameOver");
 const donaldGame = new Game({
   canvas: canvas,
   ctx: ctx,
   player: new Player(canvas.width / 2, canvas.height, 40, "red"),
+  gameOver: gameOver
 });
 donaldGame.start();

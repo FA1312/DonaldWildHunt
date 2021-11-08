@@ -1,14 +1,47 @@
 body{
   margin: 0;
   padding: 0;
+  background-color: rgb(246, 6, 6);
 }
 
 canvas {
   background-color: black;
   display: block;
-}
+  position: fixed;
+  left:0;
+  top:0;
+  }
 
 #gameOver {
+  width: 100vh;
+  height: 100vh;
   position: absolute;
+  margin: 8rem 0 0 22rem;
   visibility: hidden;
+  text-align: center;
+  color: rgba(231, 227, 16, 0.835);
+  font-size: 2rem;
+  background-image: url("https://ak.picdn.net/shutterstock/videos/1371283/thumb/1.jpg");
+  background-repeat: no-repeat;
+}
+
+button{
+  background-color: red;
+  border-radius: 20px;
+  color: yellow;
+  text-align: center;
+  text-decoration: none;
+  font-size: 2rem;
+  padding: 1rem;
+}
+
+h2{
+  margin-top: 4.5rem;
+  font-style: italic;
+}
+
+a{
+  text-decoration: none;
+  color: yellow;
+  font-style: oblique;
 }
