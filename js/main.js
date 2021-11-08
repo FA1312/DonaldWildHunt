@@ -11,6 +11,7 @@ class Game {
     };
     this.score = 0;
     this.life = 3;
+    this.bomb = 2;
     this.gameOver = options.gameOver;
   }
 
@@ -43,7 +44,7 @@ _drawEnemies() {
     this.ctx.fill();
     enemy.move();
   });
-  }
+}
 
   _drawBullets() {
     this.bullets.forEach((bullet) => {
@@ -54,21 +55,21 @@ _drawEnemies() {
     this.ctx.fill();
     bullet.move();
   });
-  }
+}
 
   _spawnEnemies() {
     setInterval(() => {
       const x = Math.random() * canvas.width;
       const y = 0;
-      const radius = 20;
-      const color = "green";
+      const radius = 65 * Math.random() + 10;
+      const color = "#" + ((1<<24)*Math.random() | 0).toString(16);
       const angle = Math.atan2(canvas.height - y, canvas.width / 2 - x);
       const speed = {
         x: Math.cos(angle),
-        y: Math.sin(angle),
+        y: Math.sin(angle)
       };
       this.enemies.push(new Enemy(x, y, radius, color, speed));
-    }, 2000);
+    }, 1200);
   }
 
   _shootBullets() {
@@ -79,7 +80,6 @@ _drawEnemies() {
       const radius = 5;
       const color = "white";
       const angle = Math.atan2(this.target.y - y, this.target.x - x);
-      console.log(angle)
       const speed = {
         x: Math.cos(angle) * 5,
         y: Math.sin(angle) * 5
@@ -88,6 +88,7 @@ _drawEnemies() {
       }
       })
   }
+
 
   _assignControls() {
     window.addEventListener("mousemove", (event) => {
@@ -100,6 +101,7 @@ _drawEnemies() {
     this.bullets.forEach((bullet, index) => {
       if (bullet.y + 1000 < this.canvas.height) {
         this.bullets.splice(index, 1);
+        this.score -= 50
       }
       if (bullet.x - bullet.radius < 0) {
         setTimeout(()=> {
@@ -125,9 +127,24 @@ _drawEnemies() {
   }
 
   _drawScore(){
-    ctx.font = "16px Arial";
+    ctx.font = "32px Arial";
     ctx.fillStyle = "#fff";
-    ctx.fillText("Score: "+ this.score, 8, 20);
+    ctx.fillText("Score: "+ this.score, 18, 40);
+  }
+
+  
+
+
+  _bomb() { //bug number of bomb is decreasing too much
+    addEventListener('keypress', (event) => { 
+      if(event.key === "b") {
+        this.bomb -= 1;
+        this.enemies = [];
+      }
+      if (this.bomb === -1) {
+        alert("Hey you are abusing power democracy! ONU is already spying on me")
+      }
+    })
   }
 
   _cleanEnemiesOutsideCanvas() {
@@ -138,6 +155,7 @@ _drawEnemies() {
       }
     })
   }
+
   _playerHit(){
     this.enemies.forEach((enemy, index)=>{
         const distance = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y)
@@ -148,10 +166,16 @@ _drawEnemies() {
       })
   }
   
+  _drawBomb(){
+    ctx.font = "24px Arial";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Bomb: "+ this.bomb, 38, 80);
+  }
+
   _drawLives(){
-    ctx.font = "16px Arial";
+    ctx.font = "42px Arial";
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("Lives: "+ this.life, canvas.width -100, canvas.height -20);
+    ctx.fillText("Lives: "+ this.life, canvas.width -180, canvas.height -60);
   }
 
   _gameOver(){
@@ -163,7 +187,7 @@ _drawEnemies() {
   
   _update() {
     this._clean();
-    this._drawPlayer();
+    this._drawPlayer();   
     this._drawEnemies();
     this._drawBullets();
     this._destroyEnemies();
@@ -173,6 +197,8 @@ _drawEnemies() {
     this._drawScore();
     this._drawLives();
     this._gameOver();
+    this._bomb();
+    this._drawBomb();
     requestAnimationFrame(this._update.bind(this));
   }
 
