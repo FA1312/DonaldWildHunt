@@ -9,6 +9,8 @@ class Game {
       x: options.canvas.width / 2,
       y: options.canvas.height / 2,
     };
+    this.score = 0;
+    this.life = 3;
   }
 
   _clean() {
@@ -27,9 +29,10 @@ class Game {
       0,
       Math.PI * 2
     );
-  this.ctx.fillStyle = this.color;
-  this.ctx.fill();
-  }
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+}
+
 
   _drawEnemies() {
     this.enemies.forEach((enemy) => {
@@ -44,8 +47,7 @@ class Game {
 
   _drawBullets() {
       this.bullets.forEach((bullet) => {
-      this.ctx.fillStyle = "white";
-      this.ctx.beginPath();
+      this.ctx.fillStyle = "white";querySelector("#gameOver")
       this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
       this.ctx.fillStyle = bullet.color;
       this.ctx.fill();
@@ -116,11 +118,19 @@ class Game {
           setTimeout(() => {
           delete this.enemies[index]
           delete this.bullets[j]
-        }, 0)
+          this.score += 100
+          }, 0)
         }
       })
     })
   }
+
+  _drawScore(){
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+ this.score, 8, 20);
+  }
+
   _cleanEnemiesOutsideCanvas() {
     this.enemies.forEach((enemy, index) => {
       if (enemy.y > this.canvas.height) {
@@ -133,28 +143,43 @@ class Game {
     this.enemies.forEach((enemy, index)=>{
         const distance = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y)
         if (distance - enemy.radius - this.player.radius < 1) {
-          console.log("gameover")
+          this.enemies.splice(index, 1)
+          this.life -= 1
         }
       })
   }
   
+  _drawLives(){
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+ this.life, canvas.width -100, canvas.height -20);
+  }
+
+  _gameOver(){
+    if (this.life == 0){
+      alert("GAME OVER");
+      document.location.reload();
+      clearInterval(interval);
+    }
+  }
+  
   _update() {
-    //clear the screen
     this._clean();
     this._drawPlayer();
     this._drawEnemies();
     this._drawBullets();
-    //this._shootBullets();
     this._destroyEnemies();
-    this._assignControls()
     this._cleanEnemiesOutsideCanvas();
     this._cleanBulletsOutsideCanvas();
     this._playerHit();
-    //this._playerHit();
+    this._drawScore();
+    this._drawLives();
+    this._gameOver();
     requestAnimationFrame(this._update.bind(this));
   }
 
   start() {
+    this._assignControls()
     this._spawnEnemies();
     this._shootBullets();
     window.requestAnimationFrame(this._update.bind(this));
