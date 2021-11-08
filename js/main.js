@@ -21,11 +21,10 @@ class Game {
   _drawPlayer() {
     this.ctx.fillStyle = "red";
     this.ctx.beginPath();
-    /*The beginPath() method begins a path*/
     this.ctx.arc(
-      this.player.x,
-      this.player.y,
-      this.player.radius,
+    this.player.x,
+    this.player.y,
+    this.player.radius,
       0,
       Math.PI * 2
     );
@@ -34,25 +33,26 @@ class Game {
 }
 
 
-  _drawEnemies() {
-    this.enemies.forEach((enemy) => {
-      this.ctx.fillStyle = "grthis._playerHit();en";
-      this.ctx.beginPath();
-      this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = enemy.color;
-      this.ctx.fill();
-      enemy.move();
-    });
+_drawEnemies() {
+  this.enemies.forEach((enemy) => {
+    this.ctx.fillStyle = "green";
+    this.ctx.beginPath();
+    this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = enemy.color;
+    this.ctx.fill();
+    enemy.move();
+  });
   }
 
   _drawBullets() {
-      this.bullets.forEach((bullet) => {
-      this.ctx.fillStyle = "white";querySelector("#gameOver")
-      this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = bullet.color;
-      this.ctx.fill();
-      bullet.move();
-    });
+    this.bullets.forEach((bullet) => {
+    this.ctx.fillStyle = "white";
+    this.ctx.beginPath();
+    this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = bullet.color;
+    this.ctx.fill();
+    bullet.move();
+  });
   }
 
   _spawnEnemies() {
@@ -68,9 +68,6 @@ class Game {
       };
       this.enemies.push(new Enemy(x, y, radius, color, speed));
     }, 2000);
-    // if (this.enemies.y > 400) {
-    //   this.enemies.splice(i, 1);
-    // }
   }
 
   _shootBullets() {
