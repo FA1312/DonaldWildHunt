@@ -58,7 +58,7 @@ _drawEnemies() {
 }
 
   _spawnEnemies() {
-    setInterval(() => {
+    setInterval(() => { 
       const x = Math.random() * canvas.width;
       const y = 0;
       const radius = 65 * Math.random() + 10;
@@ -69,7 +69,7 @@ _drawEnemies() {
         y: Math.sin(angle)
       };
       this.enemies.push(new Enemy(x, y, radius, color, speed));
-    }, 1200);
+    }, 1000);
   }
 
   _shootBullets() {
@@ -95,6 +95,25 @@ _drawEnemies() {
       this.target.x = event.clientX;
       this.target.y = event.clientY;
     });
+    window.addEventListener('keypress', (event) => { 
+      if(event.key === "b") {
+        this.bomb -= 1;
+        this.enemies = [];
+        this.score += 500;
+      }
+      if (this.bomb === -1) {
+        this.score -= 5000
+        alert("I love the way you are destroying the enemies but we should be more like Canada from now on")
+      }
+      if (this.bomb === -2) {
+        this.score -= 10000
+        alert("Here it comes another sanction from fake ONU organization")
+      }
+      if(this.bomb === -3) {
+        alert("It's over, I have been impeached by COMMUNISTS")
+        this.life = 0;
+      }
+    })
   }
 
   _cleanBulletsOutsideCanvas() {
@@ -133,20 +152,6 @@ _drawEnemies() {
   }
 
   
-
-
-  _bomb() { //bug number of bomb is decreasing too much
-    addEventListener('keypress', (event) => { 
-      if(event.key === "b") {
-        this.bomb -= 1;
-        this.enemies = [];
-      }
-      if (this.bomb === -1) {
-        alert("Hey you are abusing power democracy! ONU is already spying on me")
-      }
-    })
-  }
-
   _cleanEnemiesOutsideCanvas() {
     this.enemies.forEach((enemy, index) => {
       if (enemy.y > this.canvas.height) {
@@ -194,10 +199,9 @@ _drawEnemies() {
     this._cleanEnemiesOutsideCanvas();
     this._cleanBulletsOutsideCanvas();
     this._playerHit();
+    this._gameOver();
     this._drawScore();
     this._drawLives();
-    this._gameOver();
-    this._bomb();
     this._drawBomb();
     requestAnimationFrame(this._update.bind(this));
   }
