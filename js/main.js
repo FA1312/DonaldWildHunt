@@ -9,6 +9,10 @@ class Game {
       x: options.canvas.width / 2,
       y: options.canvas.height / 2,
     };
+    this.score = 0;
+    this.life = 3;
+    this.bomb = 2;
+    this.gameOver = options.gameOver;
   }
 
   _clean() {
@@ -19,56 +23,53 @@ class Game {
   _drawPlayer() {
     this.ctx.fillStyle = "red";
     this.ctx.beginPath();
-    /*The beginPath() method begins a path*/
     this.ctx.arc(
-      this.player.x,
-      this.player.y,
-      this.player.radius,
+    this.player.x,
+    this.player.y,
+    this.player.radius,
       0,
       Math.PI * 2
     );
-  this.ctx.fillStyle = this.color;
-  this.ctx.fill();
-  }
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+}
 
-  _drawEnemies() {
-    this.enemies.forEach((enemy) => {
-      this.ctx.fillStyle = "grthis._playerHit();en";
-      this.ctx.beginPath();
-      this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = enemy.color;
-      this.ctx.fill();
-      enemy.move();
-    });
-  }
+
+_drawEnemies() {
+  this.enemies.forEach((enemy) => {
+    this.ctx.fillStyle = "green";
+    this.ctx.beginPath();
+    this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = enemy.color;
+    this.ctx.fill();
+    enemy.move();
+  });
+}
 
   _drawBullets() {
-      this.bullets.forEach((bullet) => {
-      this.ctx.fillStyle = "white";
-      this.ctx.beginPath();
-      this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-      this.ctx.fillStyle = bullet.color;
-      this.ctx.fill();
-      bullet.move();
-    });
-  }
+    this.bullets.forEach((bullet) => {
+    this.ctx.fillStyle = "white";
+    this.ctx.beginPath();
+    this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = bullet.color;
+    this.ctx.fill();
+    bullet.move();
+  });
+}
 
   _spawnEnemies() {
-    setInterval(() => {
+    setInterval(() => { 
       const x = Math.random() * canvas.width;
       const y = 0;
-      const radius = 20;
-      const color = "green";
+      const radius = 65 * Math.random() + 10;
+      const color = "#" + ((1<<24)*Math.random() | 0).toString(16);
       const angle = Math.atan2(canvas.height - y, canvas.width / 2 - x);
       const speed = {
         x: Math.cos(angle),
-        y: Math.sin(angle),
+        y: Math.sin(angle)
       };
       this.enemies.push(new Enemy(x, y, radius, color, speed));
-    }, 2000);
-    // if (this.enemies.y > 400) {
-    //   this.enemies.splice(i, 1);
-    // }
+    }, 1000);
   }
 
   _shootBullets() {
@@ -80,25 +81,46 @@ class Game {
       const color = "white";
       const angle = Math.atan2(this.target.y - y, this.target.x - x);
       const speed = {
-        x: Math.cos(angle) * 8,
-        y: Math.sin(angle) * 8
+        x: Math.cos(angle) * 5,
+        y: Math.sin(angle) * 5
       };
       this.bullets.push(new Bullet(x, y, radius, color, speed));
       }
       })
   }
 
+
   _assignControls() {
     window.addEventListener("mousemove", (event) => {
       this.target.x = event.clientX;
       this.target.y = event.clientY;
     });
+    window.addEventListener('keypress', (event) => { 
+      if(event.key === "b") {
+        this.bomb -= 1;
+        this.enemies = [];
+        this.score += 500;
+      }
+      if (this.bomb === -1) {
+        this.score -= 5000
+        alert("I love the way you are destroying the enemies but we should be more like Canada from now on")
+      }
+      if (this.bomb === -2) {
+        this.score -= 10000
+        alert("Here it comes another sanction from fake ONU organization")
+      }
+      if(this.bomb === -3) {
+        alert("It's over, I have been impeached by COMMUNISTS")
+        this.life = 0;
+      }
+    })
   }
 
   _cleanBulletsOutsideCanvas() {
     this.bullets.forEach((bullet, index) => {
       if (bullet.y + 1000 < this.canvas.height) {
         this.bullets.splice(index, 1);
+        this.score -= 50
       }
       if (bullet.x - bullet.radius < 0) {
         setTimeout(()=> {
@@ -116,11 +138,20 @@ class Game {
           setTimeout(() => {
           delete this.enemies[index]
           delete this.bullets[j]
-        }, 0)
+          this.score += 100
+          }, 0)
         }
       })
     })
   }
+
+  _drawScore(){
+    ctx.font = "32px Arial";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Score: "+ this.score, 18, 40);
+  }
+
+  
   _cleanEnemiesOutsideCanvas() {
     this.enemies.forEach((enemy, index) => {
       if (enemy.y > this.canvas.height) {
@@ -129,32 +160,54 @@ class Game {
       }
     })
   }
+
   _playerHit(){
     this.enemies.forEach((enemy, index)=>{
         const distance = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y)
         if (distance - enemy.radius - this.player.radius < 1) {
-          console.log("gameover")
+          this.enemies.splice(index, 1)
+          this.life -= 1
         }
       })
   }
   
+  _drawBomb(){
+    ctx.font = "24px Arial";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("Bomb: "+ this.bomb, 38, 80);
+  }
+
+  _drawLives(){
+    ctx.font = "42px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Lives: "+ this.life, canvas.width -180, canvas.height -60);
+  }
+
+  _gameOver(){
+    if (this.life == 0){
+      this.gameOver.style.visibility = "visible";
+      this.canvas.style.display = "none";
+    }
+  }
+  
   _update() {
-    //clear the screen
     this._clean();
-    this._drawPlayer();
+    this._drawPlayer();   
     this._drawEnemies();
     this._drawBullets();
-    //this._shootBullets();
     this._destroyEnemies();
-    this._assignControls()
     this._cleanEnemiesOutsideCanvas();
     this._cleanBulletsOutsideCanvas();
     this._playerHit();
-    //this._playerHit();
+    this._gameOver();
+    this._drawScore();
+    this._drawLives();
+    this._drawBomb();
     requestAnimationFrame(this._update.bind(this));
   }
 
   start() {
+    this._assignControls()
     this._spawnEnemies();
     this._shootBullets();
     window.requestAnimationFrame(this._update.bind(this));
@@ -162,10 +215,14 @@ class Game {
 }
 
 const canvas = document.querySelector("#game");
+canvas.width = innerWidth
+canvas.height = innerHeight
 const ctx = canvas.getContext("2d");
+const gameOver = document.querySelector("#gameOver");
 const donaldGame = new Game({
   canvas: canvas,
   ctx: ctx,
   player: new Player(canvas.width / 2, canvas.height, 40, "red"),
+  gameOver: gameOver
 });
 donaldGame.start();
