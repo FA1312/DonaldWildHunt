@@ -72,7 +72,7 @@ _drawEnemies() {
     }, 1000);
   }
 
-  _shootBullets() {
+/*  _shootBullets() {
       addEventListener('keypress', (event) => {
       if(event.code == "Space") {
       const x = this.player.x;
@@ -88,30 +88,74 @@ _drawEnemies() {
       }
       })
   }
-
+*/
 
   _assignControls() {
     window.addEventListener("mousemove", (event) => {
       this.target.x = event.clientX;
       this.target.y = event.clientY;
     });
+    window.addEventListener('keypress', (event) => {
+      if(event.code == "Space") {
+      const x = this.player.x;
+      const y = this.player.y;
+      const radius = 5;
+      const color = "white";
+      const angle = Math.atan2(this.target.y - y, this.target.x - x);
+      const speed = {
+        x: Math.cos(angle) * 5,
+        y: Math.sin(angle) * 5
+      };
+      this.bullets.push(new Bullet(x, y, radius, color, speed));
+      }
+      });
     window.addEventListener('keypress', (event) => { 
       if(event.key === "b") {
+        setTimeout(() => {
+        this.player.radius = 10000;
+        }, 0)
+        setTimeout(() => {
+        this.player.radius = 40;
+          }, 300)
         this.bomb -= 1;
         this.enemies = [];
         this.score += 500;
+          if (this.bomb === -1) {
+            alert("Greta Thunberg is complaining that our bombs are polluting the world")
+            setTimeout(() => {
+              this.player.radius = 10000;
+              }, 0)
+              setTimeout(() => {
+              this.player.radius = 40;
+                }, 300)
+            this.score -= 5000
+          }
+          if (this.bomb === -2) {
+            alert("Here it comes another sanction from FAKE ONU organization")
+            setTimeout(() => {
+              this.player.radius = 10000;
+              }, 0)
+              setTimeout(() => {
+              this.player.radius = 40;
+                }, 300)
+            this.score -= 10000
+          }
+        if(this.bomb === -3) {
+          alert("It's over, I have been impeached by COMMUNISTS")
+          setTimeout(() => {
+            this.player.radius = 10000;
+            }, 0)
+            setTimeout(() => {
+            this.player.radius = 40;
+              }, 300)
+          
+          this.life = 0;
+        }
       }
-      if (this.bomb === -1) {
-        this.score -= 5000
-        alert("I love the way you are destroying the enemies but we should be more like Canada from now on")
-      }
-      if (this.bomb === -2) {
-        this.score -= 10000
-        alert("Here it comes another sanction from fake ONU organization")
-      }
-      if(this.bomb === -3) {
-        alert("It's over, I have been impeached by COMMUNISTS")
-        this.life = 0;
+    });
+    window.addEventListener('keypress', (event) => {
+      if(event.key == "p") {
+        alert("War for freedom is paused!")
       }
     })
   }
@@ -188,6 +232,11 @@ _drawEnemies() {
       this.gameOver.style.visibility = "visible";
       this.canvas.style.display = "none";
     }
+    if (this.score === -30000){
+      alert("Communists won! I am bankrupt!")
+      this.gameOver.style.visibility = "visible";
+      this.canvas.style.display = "none";
+    }
   }
   
   _update() {
@@ -209,7 +258,6 @@ _drawEnemies() {
   start() {
     this._assignControls()
     this._spawnEnemies();
-    this._shootBullets();
     window.requestAnimationFrame(this._update.bind(this));
   }
 }
