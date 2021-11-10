@@ -21,6 +21,23 @@ class Game {
   }
 
   _drawPlayer() {
+    this.ctx.drawImage(
+      // Cojo los aspectos del sprite que he definido antes: primero la imagen y después las medidas
+      playerSprite.sprite, 
+      playerSprite.x, 
+      playerSprite.y, 
+      playerSprite.width, 
+      playerSprite.height, 
+      // Cojo los datos de donde está el player para pintarlo en el mismo sitio en el que está ahora, estos son los mismos datos que tenéis ahora en la función de pintado
+      this.player.x, 
+      this.player.y, 
+      this.player.radius, 
+      this.player.color 
+    );
+  }
+
+  /*
+  _drawPlayer() {
     this.ctx.fillStyle = "red";
     this.ctx.beginPath();
     this.ctx.arc(
@@ -32,7 +49,7 @@ class Game {
     );
     this.ctx.fillStyle = this.color;
     this.ctx.fill();
-}
+}  */
 
 
 _drawEnemies() {
@@ -116,7 +133,7 @@ _drawEnemies() {
         }, 0)
         setTimeout(() => {
         this.player.radius = 40;
-          }, 300)
+          }, 100)
         this.bomb -= 1;
         this.enemies = [];
         this.score += 500;
@@ -127,8 +144,9 @@ _drawEnemies() {
               }, 0)
               setTimeout(() => {
               this.player.radius = 40;
-                }, 300)
+                }, 100)
             this.score -= 5000
+            this.life += 1
           }
           if (this.bomb === -2) {
             alert("Here it comes another sanction from FAKE ONU organization")
@@ -137,8 +155,9 @@ _drawEnemies() {
               }, 0)
               setTimeout(() => {
               this.player.radius = 40;
-                }, 300)
+                }, 100)
             this.score -= 10000
+            this.life += 1
           }
         if(this.bomb === -3) {
           alert("It's over, I have been impeached by COMMUNISTS")
@@ -162,7 +181,7 @@ _drawEnemies() {
 
   _cleanBulletsOutsideCanvas() {
     this.bullets.forEach((bullet, index) => {
-      if (bullet.y + 1000 < this.canvas.height) {
+      if (bullet.y + 1000< this.canvas.height || bullet.x > this.canvas.width || bullet.x + 1820 < this.canvas.width) {
         this.bullets.splice(index, 1);
         this.score -= 50
       }
@@ -231,9 +250,10 @@ _drawEnemies() {
     if (this.life == 0){
       this.gameOver.style.visibility = "visible";
       this.canvas.style.display = "none";
-    }
-    if (this.score === -30000){
-      alert("Communists won! I am bankrupt!")
+    } else if (this.score <= -30000){
+      this.score = 0
+      alert("I'm broke, I cannot build a wall anymore with this score")
+      this.life = 0
       this.gameOver.style.visibility = "visible";
       this.canvas.style.display = "none";
     }
@@ -270,7 +290,8 @@ const gameOver = document.querySelector("#gameOver");
 const donaldGame = new Game({
   canvas: canvas,
   ctx: ctx,
-  player: new Player(canvas.width / 2, canvas.height, 40, "red"),
+  player: new Player(canvas.width / 2, canvas.height, 100, "red"),
   gameOver: gameOver
 });
+
 donaldGame.start();
