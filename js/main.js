@@ -162,6 +162,7 @@ class Game {
     window.addEventListener("keypress", (event) => {
       if (event.key === "b") {
         var bombSound = new Audio("./sounds/look.mp3");
+        bombSound.volume = 0.1;
         bombSound.play();
         setTimeout(() => {
           this.player.radius = 800;
@@ -210,6 +211,7 @@ class Game {
         this.score += 5;
         setTimeout(() => {
           var thankSound = new Audio("./sounds/thank-you-very-much.mp3");
+          thankSound.volume = 0.1;
           thankSound.play();
         }, 200);
       }
@@ -226,6 +228,7 @@ class Game {
         this.bullets.splice(index, 1);
         this.score -= 50;
         const bullOutside = new Audio("./sounds/traitor.mp3");
+        bullOutside.volume = 0.1;
         bullOutside.play();
       }
       if (bullet.x - bullet.radius < 0) {
@@ -246,6 +249,7 @@ class Game {
             delete this.bullets[j];
             this.score += 100;
             var hit = new Audio("./sounds/ok.mp3");
+            hit.volume = 0.1;
             hit.play();
           }, 0);
         }
@@ -278,6 +282,7 @@ class Game {
         this.enemies.splice(index, 1);
         this.life -= 1;
         const hitDonaldSound = new Audio("./sounds/fake-news.mp3");
+        hitDonaldSound.volume = 0.1;
         hitDonaldSound.play();
         if (this.canvas.style.display === "none") {
           hitDonaldSound.volume = 0;
@@ -323,7 +328,7 @@ class Game {
     if (this.life == 0) {
       this.enemies = null;
       var lose = new Audio("./sounds/sad-trombone.mp3");
-      lose.volume = 0.3;
+      lose.volume = 0.1;
       lose.playbackRate = 1;
       setTimeout(() => {
         lose.play();
