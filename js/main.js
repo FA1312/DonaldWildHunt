@@ -21,7 +21,18 @@ class Game {
   }
 
   _drawPlayer() {
-    this.ctx.drawImage(this.player.image, 820, 790);
+    this.ctx.fillStyle = "red";
+    this.ctx.beginPath();
+    this.ctx.arc(
+      this.player.x,
+      this.player.y,
+      this.player.radius,
+      0,
+      Math.PI * 2
+    );
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+    this.ctx.drawImage(this.player.image, 820, 820);
   }
 
   /*
@@ -41,6 +52,10 @@ class Game {
 
   _drawEnemies() {
     this.enemies.forEach((enemy) => {
+      this.posx = enemy.x - 50;
+      this.posy = enemy.y - 50;
+      this.posy += enemy.speed.y;
+      this.ctx.drawImage(enemy.image, this.posx, this.posy, 100, 100);
       this.ctx.fillStyle = "green";
       this.ctx.beginPath();
       this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
@@ -65,14 +80,27 @@ class Game {
     setInterval(() => {
       const x = Math.random() * canvas.width;
       const y = 0;
-      const radius = 65 * Math.random() + 10;
-      const color = "#" + (((1 << 24) * Math.random()) | 0).toString(16);
+      const radius = 35;
+      const color = "rgba( 255, 255, 255, 0.01 )";
+      const imageArr = [
+        "rasta.png",
+        "lgbt.png",
+        "china.png",
+        "terrorist.png",
+        "Obama.png",
+        "mexico.png",
+        "cannabis.png",
+        "osama.png",
+      ];
+      var basePath = "./img/";
+      var rand = imageArr[Math.floor(Math.random() * imageArr.length)];
+      var image = basePath + rand;
       const angle = Math.atan2(canvas.height - y, canvas.width / 2 - x);
       const speed = {
         x: Math.cos(angle),
         y: Math.sin(angle),
       };
-      this.enemies.push(new Enemy(x, y, radius, color, speed));
+      this.enemies.push(new Enemy(x, y, radius, color, speed, image));
     }, 1000);
   }
 
@@ -116,10 +144,10 @@ class Game {
     window.addEventListener("keypress", (event) => {
       if (event.key === "b") {
         setTimeout(() => {
-          this.player.radius = 10000;
+          this.player.radius = 7000;
         }, 0);
         setTimeout(() => {
-          this.player.radius = 40;
+          this.player.radius = 20;
         }, 300);
         this.bomb -= 1;
         this.enemies = [];
@@ -129,31 +157,33 @@ class Game {
             "Greta Thunberg is complaining that our bombs are polluting the world"
           );
           setTimeout(() => {
-            this.player.radius = 10000;
+            this.player.radius = 7000;
           }, 0);
           setTimeout(() => {
-            this.player.radius = 40;
-          }, 300);
+            this.player.radius = 20;
+          }, 200);
           this.score -= 5000;
+          this.life += 1;
         }
         if (this.bomb === -2) {
           alert("Here it comes another sanction from FAKE ONU organization");
           setTimeout(() => {
-            this.player.radius = 10000;
+            this.player.radius = 7000;
           }, 0);
           setTimeout(() => {
-            this.player.radius = 40;
-          }, 300);
+            this.player.radius = 20;
+          }, 200);
           this.score -= 10000;
+          this.life += 1;
         }
         if (this.bomb === -3) {
           alert("It's over, I have been impeached by COMMUNISTS");
           setTimeout(() => {
-            this.player.radius = 10000;
+            this.player.radius = 7000;
           }, 0);
           setTimeout(() => {
-            this.player.radius = 40;
-          }, 300);
+            this.player.radius = 20;
+          }, 200);
 
           this.life = 0;
         }
@@ -286,7 +316,7 @@ const donaldGame = new Game({
   player: new Player(
     canvas.width / 2,
     canvas.height,
-    100,
+    20,
     "red",
     "./img/donald2.png"
   ),
