@@ -91,14 +91,32 @@ class Game {
         "mexico.png",
         "cannabis.png",
         "osama.png",
+        "biden.png",
+        "greta.png",
+        "nk.png",
+        "covid.png",
+        "blm.png",
+        "twitter.png",
+        "onu.png",
+        "putin.png",
+        "kim_jong.png",
+        "comunism.png",
+        "democrats.png",
+        "canada.png",
+        "arab.png",
+        "hippie.png",
+        "joint.png",
+        "greta2.png",
+        "mario.png",
+        "melania.png",
       ];
       var basePath = "./img/";
       var rand = imageArr[Math.floor(Math.random() * imageArr.length)];
       var image = basePath + rand;
       const angle = Math.atan2(canvas.height - y, canvas.width / 2 - x);
       const speed = {
-        x: Math.cos(angle),
-        y: Math.sin(angle),
+        x: Math.cos(angle) * 2,
+        y: Math.sin(angle) * 2,
       };
       this.enemies.push(new Enemy(x, y, radius, color, speed, image));
     }, 1000);
@@ -143,12 +161,14 @@ class Game {
     });
     window.addEventListener("keypress", (event) => {
       if (event.key === "b") {
+        var bombSound = new Audio("./sounds/look.mp3");
+        bombSound.play();
         setTimeout(() => {
-          this.player.radius = 7000;
+          this.player.radius = 800;
         }, 0);
         setTimeout(() => {
           this.player.radius = 20;
-        }, 300);
+        }, 500);
         this.bomb -= 1;
         this.enemies = [];
         this.score += 500;
@@ -157,34 +177,25 @@ class Game {
             "Greta Thunberg is complaining that our bombs are polluting the world"
           );
           setTimeout(() => {
-            this.player.radius = 7000;
+            this.player.radius = 800;
           }, 0);
           setTimeout(() => {
             this.player.radius = 20;
-          }, 200);
+          }, 500);
           this.score -= 5000;
-          this.life += 1;
         }
         if (this.bomb === -2) {
           alert("Here it comes another sanction from FAKE ONU organization");
           setTimeout(() => {
-            this.player.radius = 7000;
+            this.player.radius = 800;
           }, 0);
           setTimeout(() => {
             this.player.radius = 20;
-          }, 200);
+          }, 500);
           this.score -= 10000;
-          this.life += 1;
         }
         if (this.bomb === -3) {
           alert("It's over, I have been impeached by COMMUNISTS");
-          setTimeout(() => {
-            this.player.radius = 7000;
-          }, 0);
-          setTimeout(() => {
-            this.player.radius = 20;
-          }, 200);
-
           this.life = 0;
         }
       }
@@ -192,6 +203,15 @@ class Game {
     window.addEventListener("keypress", (event) => {
       if (event.key == "p") {
         alert("War for freedom is paused!");
+      }
+    });
+    window.addEventListener("keypress", (event) => {
+      if (event.key === "t") {
+        this.score += 5;
+        setTimeout(() => {
+          var thankSound = new Audio("./sounds/thank-you-very-much.mp3");
+          thankSound.play();
+        }, 200);
       }
     });
   }
@@ -205,6 +225,8 @@ class Game {
       ) {
         this.bullets.splice(index, 1);
         this.score -= 50;
+        const bullOutside = new Audio("./sounds/traitor.mp3");
+        bullOutside.play();
       }
       if (bullet.x - bullet.radius < 0) {
         setTimeout(() => {
@@ -223,6 +245,8 @@ class Game {
             delete this.enemies[index];
             delete this.bullets[j];
             this.score += 100;
+            var hit = new Audio("./sounds/ok.mp3");
+            hit.play();
           }, 0);
         }
       });
@@ -253,13 +277,18 @@ class Game {
       if (distance - enemy.radius - this.player.radius < 1) {
         this.enemies.splice(index, 1);
         this.life -= 1;
+        const hitDonaldSound = new Audio("./sounds/fake-news.mp3");
+        hitDonaldSound.play();
+        if (this.canvas.style.display === "none") {
+          hitDonaldSound.volume = 0;
+        }
       }
     });
   }
 
   _drawBomb() {
     ctx.font = "24px Arial";
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = "red";
     ctx.fillText("Bomb: " + this.bomb, 38, 80);
   }
 
@@ -269,8 +298,37 @@ class Game {
     ctx.fillText("Lives: " + this.life, canvas.width - 180, canvas.height - 60);
   }
 
+  _frenzyMode() {
+    if (this.score > 500) {
+      this._spawnEnemies.speed = {
+        x: Math.cos(this.angle) * 5,
+        y: Math.sin(this.angle) * 5,
+      };
+    }
+    if (this.score > 1000) {
+      this._spawnEnemies.speed = {
+        x: Math.cos(this.angle) * 10,
+        y: Math.sin(this.angle) * 10,
+      };
+    }
+    if (this.score > 2000) {
+      this._spawnEnemies.speed = {
+        x: Math.cos(this.angle) * 20,
+        y: Math.sin(this.angle) * 20,
+      };
+    }
+  }
+
   _gameOver() {
     if (this.life == 0) {
+      this.enemies = null;
+      var lose = new Audio("./sounds/sad-trombone.mp3");
+      lose.volume = 0.3;
+      lose.playbackRate = 1;
+      setTimeout(() => {
+        lose.play();
+      }, 2500);
+
       this.gameOver.style.visibility = "visible";
       this.canvas.style.display = "none";
     } else if (this.score <= -30000) {
@@ -295,12 +353,14 @@ class Game {
     this._drawScore();
     this._drawLives();
     this._drawBomb();
+    this._frenzyMode();
     requestAnimationFrame(this._update.bind(this));
   }
 
   start() {
     this._assignControls();
     this._spawnEnemies();
+
     window.requestAnimationFrame(this._update.bind(this));
   }
 }
@@ -308,7 +368,7 @@ class Game {
 const canvas = document.querySelector("#game");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d", { alpha: false });
 const gameOver = document.querySelector("#gameOver");
 const donaldGame = new Game({
   canvas: canvas,
