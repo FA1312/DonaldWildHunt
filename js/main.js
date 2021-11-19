@@ -32,7 +32,8 @@ class Game {
     );
     this.ctx.fillStyle = this.color;
     this.ctx.fill();
-    this.ctx.drawImage(this.player.image, this.player.x - 100, 835);
+    this.ctx.drawImage(this.player.image, this.player.x - 100, 820);
+
   }
 
   /*
