@@ -1,16 +1,11 @@
 class Player {
-  constructor(x, y, radius, color) {
+  constructor(x, y, radius, color, image) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = color;
+    this.image = new Image();
+    this.image.src = image;
   }
-  playerHit(){
-    this.enemies.forEach((enemy, index)=>{
-      const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
-      if (distance - enemy.radius - player.radius < 1) {
-        console.log("gameover")
-      }
-    })
-  }
+  
 }

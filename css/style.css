@@ -99,3 +99,14 @@ a {
   text-decoration: none;
   color: #FFFFFF;
 }
+
+section {
+  position: absolute;
+  background-color: none;
+  color: black;
+  margin: 35rem 0 0 30rem;
+  border: black;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 1000;
+}

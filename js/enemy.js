@@ -1,10 +1,12 @@
 class Enemy {
-  constructor(x, y, radius, color, speed){
-      this.x = x;
-      this.y = y;
-      this.radius = radius;
-      this.color = color;
-      this.speed = speed;   
+  constructor(x, y, radius, color, speed, image) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.speed = speed;
+    this.image = new Image();
+    this.image.src = image;
   }
   move() {
     this.intervalId = setInterval(() => {
@@ -16,7 +18,3 @@ class Enemy {
     clearInterval(this.intervalId);
   }
 }
-
-
-
-
