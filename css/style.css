@@ -7,8 +7,8 @@
   position: absolute;
   border-radius: 50%;
   text-align: center;
-  margin-top: 11rem;
-  margin-left: 28rem;
+  margin-top: 7rem;
+  margin-left: 25rem;
   width: 43%;
 }
 
@@ -58,8 +58,8 @@
 h2 {
   position: absolute;
   background: none;
-  top: 15rem;
-  left: 32rem;
+  top: 11rem;
+  left: 30rem;
   font-size: 2.1rem;
   color: #001149;
   font-style: italic;
@@ -70,8 +70,8 @@ h3 {
   font-style: italic;
   position: absolute;
   background: none;
-  top: 20rem;
-  left: 30rem;
+  top: 16rem;
+  left: 28rem;
   color: aliceblue;
 }
 
@@ -81,8 +81,8 @@ button {
   font-size: 1rem;
   font-weight: 600;
   position: absolute;
-  top: 27rem;
-  left: 41rem;
+  top: 22rem;
+  left: 34rem;
   border-radius: 10px;
   text-decoration: none;
   background-color: #0037eb;
@@ -100,13 +100,16 @@ a {
   color: #FFFFFF;
 }
 
-section {
+.instructions {
   position: absolute;
-  background-color: none;
+  padding: 1rem;
+  background-color: rgba(256, 256, 256, 0.3);
   color: black;
-  margin: 35rem 0 0 30rem;
+  margin: 30rem 0 0 20rem;
   border: black;
   text-align: center;
   font-size: 1.15rem;
-  font-weight: 1000;
+  font-weight: 800;
+  border-radius: 10%;
+  border: 20px solid rgba(10, 10, 256, 0.8);
 }
