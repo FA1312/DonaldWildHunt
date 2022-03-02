@@ -58,10 +58,8 @@ Definition of the different states and their transition (transition functions):
 ### Git
 ​
 URls for the project repo and deploy
-[Link Repo]
-[Link Deploy]
+Link Repo
+https://github.com/FA1312/DonaldWildHunt
+Deploy
+https://fa1312.github.io/DonaldWildHunt/game.html
 ​
-### Slides
-​
-URls for the project presentation (slides)
-[Link Slides.com]
