@@ -60,6 +60,6 @@ Definition of the different states and their transition (transition functions):
 URls for the project repo and deploy
 Link Repo
 https://github.com/FA1312/DonaldWildHunt
-Deploy
-https://fa1312.github.io/DonaldWildHunt/game.html
 ​
+Deploy
+https://fa1312.github.io/DonaldWildHunt/
