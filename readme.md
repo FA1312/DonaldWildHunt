@@ -4,7 +4,7 @@ Donald wild Hunt
 ​
 ## Description
 ​
-Deomocracy is at stake, there is only one person that can defend us all!
+Democracy is at stake, there is only one person that can defend us all!
 Take the lead and guide our president to save the democracy.
 ​
 ## MVP
